@@ -1,6 +1,15 @@
+let employeePayrollList;
 window.addEventListener("DOMContentLoaded", () => {
+    employeePayrollList = getEmployeePayrollDataFromStorage();
+    document.querySelector(".emp-count").textContent = employeePayrollList.length;
     createInnerHtml();
+    localStorage.removeItem("EmployeeToEdit");
 });
+
+const getEmployeePayrollDataFromStorage = () => {
+    return localStorage.getItem("EmployeePayrollList") ?
+        JSON.parse(localStorage.getItem("EmployeePayrollList")) : [];
+};
 
 const createInnerHtml = () => {
     const headerHtml =
@@ -11,9 +20,11 @@ const createInnerHtml = () => {
         "<th>Salary</th>" +
         "<th>Start Date</th>" +
         "<th>Actions</th>";
-    let employeePayrollLocalList = createEmployeePayrollJSON();
     let innerHtml = `${headerHtml}`;
-    for (let employeePayrollData of employeePayrollLocalList) {
+    if (employeePayrollList.length == 0) {
+        return;
+    }
+    for (let employeePayrollData of employeePayrollList) {
         innerHtml = `${innerHtml}
         <tr>
             <td><img class="profile" alt="" src="${employeePayrollData._profilePicture}"></td>
@@ -21,10 +32,10 @@ const createInnerHtml = () => {
             <td>${employeePayrollData._gender}</td>
             <td>${getDepartmentHtml(employeePayrollData._departments)}</td>
             <td>${employeePayrollData._salary}</td>
-            <td>${employeePayrollData._startDate}</td>
+            <td>${stringifyDate(employeePayrollData._startDate)}</td>
             <td>
-                <img name="${employeePayrollData._id}" onclick="remove(this)" alt="delete" src="..//assets/icons/delete-black-18dp.svg">
-                <img name="${employeePayrollData._id}" onclick="update(this)" alt="edit" src="..//assets/icons/create-black-18dp.svg">
+                <img id="${employeePayrollData._id}" onclick="remove(this)" alt="delete" src="..//assets/icons/delete-black-18dp.svg">
+                <img id="${employeePayrollData._id}" onclick="update(this)" alt="edit" src="..//assets/icons/create-black-18dp.svg">
             </td>
         </tr>
         `;
@@ -32,39 +43,29 @@ const createInnerHtml = () => {
     document.querySelector("#display").innerHTML = innerHtml;
 };
 
-const createEmployeePayrollJSON = () => {
-    let employeePayrollLocalList = [{
-            _name: 'Aditya Verma',
-            _gender: 'Male',
-            _departments: [
-                'HR', 'Finance'
-            ],
-            _salary: '500000',
-            _startDate: '01 Jan 2020',
-            _note: 'First Dummy Employee',
-            _id: new Date().getTime(),
-            _profilePicture: '../assets/profile-images/Ellipse -3.png'
-        },
-        {
-            _name: 'Alyana Singh',
-            _gender: 'Female',
-            _departments: [
-                'HR', 'Finance', 'Others'
-            ],
-            _salary: '700000',
-            _startDate: '01 Aug 2016',
-            _note: 'Second Dummy Employee',
-            _id: new Date().getTime() + 1,
-            _profilePicture: '../assets/profile-images/Ellipse -7.png'
-        }
-    ];
-    return employeePayrollLocalList;
-}
-
 const getDepartmentHtml = (departmentList) => {
     let departmentHtml = "";
-    for (let department of departmentList) {
-        departmentHtml = `${departmentHtml} <div class="dept-label">${department}</div>`;
+    if (departmentList) {
+        for (let department of departmentList) {
+            departmentHtml = `${departmentHtml} <div class="dept-label">${department}</div>`;
+        }
     }
     return departmentHtml;
+};
+
+const remove = (node) => {
+    let employeePayrollData = employeePayrollList.find(employeeData => employeeData._id == node.id);
+    if (!employeePayrollData) return;
+    const index = employeePayrollList.map(employeeData => employeeData._id).indexOf(employeePayrollData._id);
+    employeePayrollList.splice(index, 1);
+    localStorage.setItem("EmployeePayrollList", JSON.stringify(employeePayrollList));
+    document.querySelector(".emp-count").textContent = employeePayrollList.length;
+    createInnerHtml();
+};
+
+const update = (node) => {
+    let employeePayrollData = employeePayrollList.find(employeeData => employeeData._id == node.id);
+    if (!employeePayrollData) return;
+    localStorage.setItem("EmployeeToEdit", JSON.stringify(employeePayrollData));
+    window.location.replace(site_properties.add_employee_payroll_page);
 };
