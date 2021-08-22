@@ -8,6 +8,9 @@
     <link rel="stylesheet" href="../css/payroll_form_style.css">
     <title>Employee Payroll Form</title>
     <script defer src="../js/payroll_form_script.js"></script>
+    <script defer src="../js/employee_payroll_data.js"></script>
+    <script src="../js/utility_script.js"></script>
+    <script src="../js/site_properties_script.js"></script>
 </head>
 
 <body>
@@ -21,7 +24,7 @@
         </div>
     </header>
     <div class="form-content">
-        <form class="form" action="#" onsubmit="save()" onreset="resetForm()">
+        <form class="form" action="#" onsubmit="save(event)" onreset="resetForm()">
             <div class="form-head">Employee Payroll form</div>
             <div class="row-content">
                 <label class="label text" for="name">Name</label>
@@ -33,7 +36,7 @@
                 <label class="label text" for="profile">Profile Image</label>
                 <div class="profile-radio-content">
                     <label>
-                        <input type="radio" id="profile1" name="profile" value="../assets/profile-images/Eclipse -3.png" required>
+                        <input type="radio" id="profile1" name="profile" value="../assets/profile-images/Ellipse -3.png" required>
                         <img class="profile" id="image1" src="../assets/profile-images/Ellipse -3.png">
                     </label>
                     <label>
@@ -47,6 +50,14 @@
                     <label>
                         <input type="radio" id="profile4" name="profile" value="../assets/profile-images/Ellipse -7.png" required>
                         <img class="profile" id="image4" src="../assets/profile-images/Ellipse -7.png">
+                    </label>
+                    <label>
+                        <input type="radio" id="profile5" name="profile" value="../assets/profile-images/Ellipse -2.png" required>
+                        <img class="profile" id="image5" src="../assets/profile-images/Ellipse -2.png">
+                    </label>
+                    <label>
+                        <input type="radio" id="profile6" name="profile" value="../assets/profile-images/Ellipse -1.png" required>
+                        <img class="profile" id="image6" src="../assets/profile-images/Ellipse -1.png">
                     </label>
                 </div>
             </div>
@@ -135,7 +146,7 @@
                         <option value="Mar">March</option>
                         <option value="Apr">April</option>
                         <option value="May">May</option>
-                        <option value="June">June</option>
+                        <option value="Jun">June</option>
                         <option value="July">July</option>
                         <option value="Aug">August</option>
                         <option value="Sep">September</option>
